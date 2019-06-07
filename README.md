@@ -1,4 +1,4 @@
 # functional-profiles-maple-root-bacteria
 Framework to predict functional profiles from amplicon data
 
-Tonia DeBellis' Maple Root Bacteria Data
+Tonia De Bellis' Maple Root Bacteria Data
