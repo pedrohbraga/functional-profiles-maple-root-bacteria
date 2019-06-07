@@ -1,11 +1,10 @@
 ###############################################################
 # Framework to predict functional profiles from amplicon data # 
 # Data: Tonia DeBellis Maple Root Bacteria Data               #
-# Date: 06/06/2019                                            #
+# Date: 07/06/2019                                            #
 ###############################################################
 
 #### Prepare your R environment ####
-
 
 # Clear your R environment
 # rm(list=ls())
@@ -64,7 +63,7 @@ library(biom)
 #### Workflow ####
 #### Using Tax4Fun and biomformat ####
 
-# Generation of OTU, taxa and metadata tables 
+# Loading OTU, taxonomic and metadata information 
 Q.ROOT.bact.otu <- read.csv("Q.ROOTBACTcomm.8kRARESILVA.T4FB.csv", 
                             row.names = 1) 
 
@@ -75,6 +74,7 @@ Q.ROOT.bact.taxo <- read.csv("Q.ROOTBACTtaxSILVA.T4F.csv",
                              row.names = 1, 
                              stringsAsFactors = T)[, 1:7]
 
+# Checking data structure
 dim(Q.ROOT.bact.otu) # 76 3608
 dim(Q.ROOT.bact.meta) # 76 23
 dim(Q.ROOT.bact.taxo) # 3608 7
@@ -83,11 +83,12 @@ dim(Q.ROOT.bact.taxo) # 3608 7
 # Q.ROOT.bact.otu[colSums(Q.ROOT.bact.otu) == 0]
 
 # Generate Biom File  (biomformat)
-# https://rdrr.io/bioc/biomformat/man/make_biom.html
+# https://rdrr.io/bioc/biomformat/man/make_biom.html 
 # data =   OTUs / species are rows, samples / sites  are columns.
-# sample metadata = data.frame with the number of rows equal to the number of samples in data
-# observational metadata = 
-#  data.frame with the number of rows equal to the number of features / species / OTUs / genes in data
+# sample metadata = data.frame with the number of rows equal to the number of
+# samples in data
+# observational metadata = data.frame with the number of rows equal to the number
+# of features / species / OTUs / genes in data
 
 rootBact_biom <- biomformat::make_biom(data = t(Q.ROOT.bact.otu), 
                                        sample_metadata = Q.ROOT.bact.meta,
@@ -189,16 +190,6 @@ ordiplot(rootBact.Tax4Fun.metaPath.metaMDS,
          type="text")
 
 
-# BetaDiv distances
-
-# LCBD: Functional and Taxonomic Composition 
-# SCBD: Functional and Taxonomic Composition
-
-# permanova - nestedness and random effect
-
-# Plots
-
-# ~ Latitude
 
 # How functionally unique sites are? E:
 rootBact.Tax4Fun.fctProf.sorensen <- betadiver(decostand(rootBact.Tax4Fun.metaPath.out, method = "hellinger"), "w")
@@ -208,6 +199,7 @@ rootBact.Tax4Fun.fctProf.BrayDis <- vegdist(decostand(rootBact.Tax4Fun.fctProf.o
 
 # run without copy number correction
 biom.tax4fun.test.uncorr <- Tax4Fun(tax4fun.test.biom, "SILVA123", shortReadMode = FALSE, normCopyNo = FALSE)
+
 ## summarize
 biom.tax4fun.test.uncorr
 
@@ -223,3 +215,19 @@ save.image(file= "tax4fun.test.RData")
 
 metaMDS.gene.abund <- metaMDS(decostand(gene.abunds, method = "hellinger"))
 ordiplot()
+
+########################
+# Forthcoming analyses #
+########################
+
+# BetaDiv distances
+
+# LCBD: Functional and Taxonomic Composition 
+# SCBD: Functional and Taxonomic Composition
+
+# permanova - nestedness and random effect
+
+# Plots
+
+# ~ Latitude
+
